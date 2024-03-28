@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  BackEnd:
+    build:
+      context: .
+      dockerfile: .\assignment-nodejs-bayer\Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+        JWT_SECURE_KEY: ecdc770b-85df-4479-af92-18b1c69d72a6
+    depends_on:
+      - mysql
+
+  FrontEnd:
+    build:
+      context: .
+      dockerfile: .\assignment-react-bayer\Dockerfile
+    ports:
+      - "3000:3000"
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: assignment-bayer
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ""
+      MYSQL_HOST: localhost
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data:/docker-entrypoint-initdb.d
+    networks:
+      - mynetwork
+ 
+networks:
+  mynetwork:
